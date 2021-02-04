@@ -1,0 +1,153 @@
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=no"/>
+    <meta name="theme-color" content="#3f51b5">
+    <title>浙江工业大学</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/mdui.min.css">
+    <script src="/static/js/mdui.min.js"></script>
+    <script src="/static/js/request.js"></script>
+</head>
+<script type="application/javascript">
+    let flag = true
+
+    function allow_submit() {
+        flag = true
+        document.getElementById("submit").enabled = true
+    }
+
+    function get_score() {
+        if (flag) {
+            document.getElementById("submit").enabled = false
+            flag = false
+            window.setTimeout(allow_submit, 10000)
+            let username = document.getElementById("username").value
+            let password = document.getElementById("password").value
+            let year = document.getElementById("year").value
+            let terms = document.getElementsByName("term")
+            let t = 3
+            terms.forEach(term => {
+                if (term.checked) {
+                    t = term.value
+                }
+            })
+            document.getElementById("")
+            request("score", `username=${username}&password=${password}&year=${year}&term=${t}`, res => {
+                let html = ""
+                res.forEach(item => {
+                    let table = document.getElementById("table")
+                    let row = table.insertRow(1)
+                    row.innerHTML = `<td>${item[0]}</td><td>${item[1]}</td><td>${item[2]}</td><td>${item[3]}</td>`
+                })
+                document.getElementById("display").style.display = "block"
+                document.getElementById("submit").style.display = "none"
+            })
+        }
+    }
+
+    function back_to_submit() {
+        document.getElementById("display").style.display = "none"
+        document.getElementById("submit").style.display = "block"
+        let len = document.getElementById("table").rows.length
+        for (let i = 1; i < len; i++) {
+            document.getElementById("table").deleteRow(1)
+        }
+    }
+</script>
+<body class="mdui-appbar-with-toolbar  mdui-loaded mdui-theme-primary-indigo  mdui-theme-accent-deep-purple">
+<header class="mdui-appbar mdui-appbar-fixed" id="header">
+    <div class="mdui-toolbar mdui-color-theme">
+       <span class="mdui-btn mdui-btn-icon mdui-ripple mdui-ripple-white"
+       >
+            <i class="mdui-icon material-icons">home</i>
+        </span>
+        <a href="" class="mdui-typo-headline mdui-hidden-xs"
+           style="font-weight: inherit">浙江工业大学</a>
+        <a href="" class="mdui-typo-title " style="font-weight: inherit">成绩明细查询</a>
+        <div class="mdui-toolbar-spacer"></div>
+
+    </div>
+</header>
+<div class="mdui-col-md12 mdui-hidden-md-down" style="height: 64px">
+</div>
+<div id="submit">
+    <div class="mdui-col-md-4 mdui-col-sm-12">
+    </div>
+    <div class="mdui-col-md-4 mdui-col-sm-12  mdui-typo">
+        <h1 class="mdui-center mdui-text-color-theme mdui-text-center">成绩明细查询</h1>
+        <form>
+            <div class="mdui-textfield mdui-textfield-floating-label">
+                <i class="mdui-icon material-icons">school</i>
+                <label class="mdui-textfield-label">学号</label>
+                <input class="mdui-textfield-input" type="text" id="username" value=""/>
+            </div>
+            <div class="mdui-textfield mdui-textfield-floating-label">
+                <i class="mdui-icon material-icons">security</i>
+                <label class="mdui-textfield-label">密码</label>
+                <input class="mdui-textfield-input" type="password" id="password" value=""/>
+            </div>
+            <div class="mdui-textfield mdui-textfield-floating-label">
+                <i class="mdui-icon material-icons">toc</i>
+                <label class="mdui-textfield-label">学年</label>
+                <input class="mdui-textfield-input" type="text" id="year" value="2020"/>
+            </div>
+            <div class="mdui-textfield mdui-textfield-floating-label mdui-textfield-not-empty">
+                <i class="mdui-icon material-icons">filter_1</i>
+                <label class="mdui-textfield-label">学期</label>
+                <label class="mdui-radio" style="visibility: hidden">
+                    <input type="radio"/>
+                    <i class="mdui-radio-icon"></i>
+                    我
+                </label>
+                <label class="mdui-radio">
+                    <input type="radio" name="term" checked value="3"/>
+                    <i class="mdui-radio-icon"></i>
+                    第一学期
+                </label>
+                &nbsp;&nbsp;
+                <label class="mdui-radio">
+                    <input type="radio" name="term" value="12"/>
+                    <i class="mdui-radio-icon"></i>
+                    第二学期
+                </label>
+                &nbsp;&nbsp;
+                <label class="mdui-radio">
+                    <input type="radio" name="term" value="16"/>
+                    <i class="mdui-radio-icon"></i>
+                    短学期
+                </label>
+            </div>
+        </form>
+        <button class="mdui-btn mdui-ripple mdui-center mdui-color-theme-accent" onclick="get_score()">
+            查询成绩
+        </button>
+    </div>
+    <div class="mdui-col-md-4 mdui-col-sm-12">
+    </div>
+</div>
+<div id="display" style="display: none">
+    <h1 class="mdui-center mdui-text-color-theme mdui-text-center">成绩明细</h1>
+    <table class="mdui-table mdui-table-hoverable" id="table">
+        <tr>
+            <td>
+                课程名称
+            </td>
+            <td>
+                平时成绩
+            </td>
+            <td>
+                期末成绩
+            </td>
+            <td>
+                总评
+            </td>
+        </tr>
+    </table>
+    <br>
+    <button class="mdui-btn mdui-ripple mdui-center mdui-color-theme-accent" onclick="back_to_submit()">
+        返回
+    </button>
+</div>
+</body>
+</html>
+

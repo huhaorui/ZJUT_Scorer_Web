@@ -1,0 +1,23 @@
+.center {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+p:hover .clickable {
+    cursor: pointer;
+}
+
+.input_file {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+
+.mdui-select-menu {
+    max-height: 200px !important;
+}
